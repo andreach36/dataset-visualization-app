@@ -38,7 +38,7 @@ func ConvertDataSet() {
 	db.Exec("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status_enum') THEN CREATE TYPE status_enum AS ENUM ('active', 'inactive', 'pending'); END IF; END $$;")
 
 	// Migrar el esquema para crear la tabla
-	if err := db.AutoMigrate(&models.UserRecord{}); err != nil {
+	if err := db.AutoMigrate(&models.DataRecord{}); err != nil {
 		log.Fatalf("Error en la migración de la base de datos: " + err.Error())
 	}
 
@@ -52,19 +52,19 @@ func ConvertDataSet() {
 	defer file.Close()
 
 	// read the csv file into a slice of record structs
-	var userRecords []models.UserRecord
-	if err := gocsv.UnmarshalFile(file, &userRecords); err != nil {
+	var dataRecords []models.DataRecord
+	if err := gocsv.UnmarshalFile(file, &dataRecords); err != nil {
 		log.Fatalf("Error al convertir csv a datos estructurados" + err.Error())
 	}
 
 	// procesar los registros en lotes concurrentes
-	batchUserRecord(db, userRecords)
+	batchUserRecord(db, dataRecords)
 
 }
 
-func saveUserRecord(db *gorm.DB, userRecords []models.UserRecord, done chan<- bool) {
+func saveUserRecord(db *gorm.DB, dataRecords []models.DataRecord, done chan<- bool) {
 	// guardar los registros en la base de datos
-	if err := db.Create(&userRecords).Error; err != nil {
+	if err := db.Create(&dataRecords).Error; err != nil {
 		log.Printf("Error al guardar el lote de registros: %v", err)
 		done <- false
 		return
@@ -74,19 +74,19 @@ func saveUserRecord(db *gorm.DB, userRecords []models.UserRecord, done chan<- bo
 	fmt.Println("Lote de datos importado correctamente en la base de datos")
 }
 
-func batchUserRecord(db *gorm.DB, userRecords []models.UserRecord) {
+func batchUserRecord(db *gorm.DB, dataRecords []models.DataRecord) {
 	const batchSize = 1000 // numero de registros por lote
 	done := make(chan bool)
-	totalBatches := (len(userRecords) + batchSize - 1) / batchSize
+	totalBatches := (len(dataRecords) + batchSize - 1) / batchSize
 
 	// procesar cada lote en una goroutine
-	for i := 0; i < len(userRecords); i += batchSize {
+	for i := 0; i < len(dataRecords); i += batchSize {
 		end := i + batchSize
-		if end > len(userRecords) {
-			end = len(userRecords)
+		if end > len(dataRecords) {
+			end = len(dataRecords)
 		}
 		// lanzar una goroutine para cada lote
-		go saveUserRecord(db, userRecords[i:end], done)
+		go saveUserRecord(db, dataRecords[i:end], done)
 	}
 	// esperar a que todos los lotes terminen
 	for i := 0; i < totalBatches; i++ {
