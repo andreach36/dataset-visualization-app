@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"trucode3-challenge-final/project_api/models"
 
 	"github.com/gocarina/gocsv"
@@ -55,6 +56,14 @@ func ConvertDataSet() {
 	var dataRecords []models.DataRecord
 	if err := gocsv.UnmarshalFile(file, &dataRecords); err != nil {
 		log.Fatalf("Error al convertir csv a datos estructurados" + err.Error())
+	}
+
+	// limpiar los espacios en blanco de los datos
+	for i := range dataRecords{
+		dataRecords[i].Education = strings.TrimSpace(dataRecords[i].Education)
+		dataRecords[i].Marital_Status = strings.TrimSpace(dataRecords[i].Marital_Status)
+		dataRecords[i].Occupation = strings.TrimSpace(dataRecords[i].Occupation)
+		dataRecords[i].Income = strings.TrimSpace(dataRecords[i].Income)
 	}
 
 	// procesar los registros en lotes concurrentes

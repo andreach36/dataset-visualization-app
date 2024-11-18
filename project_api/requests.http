@@ -1,0 +1,36 @@
+### Mostrar la data
+GET http://localhost:3333/data/all
+Content-Type: application/json
+
+### Mostrar data filtrada por educacion
+GET http://localhost:3333/data/filter/education?education=Bachelors&page=1&limit=10
+Content-Type: application/json
+
+### Mostrar data filtrada por estado civil
+GET http://localhost:3333/data/filter/marital_status?marital_status=Never-married&page=1&limit=10
+Content-Type: application/json
+
+### Mostrar data filtrada por ocupación
+GET http://localhost:3333/data/filter/occupation?occupation=Priv-house-serv&page=1&limit=10
+Content-Type: application/json
+
+### Mostrar data filtrada por edad
+GET http://localhost:3333/data/filter/age?min_age=20&max_age=30&page=1&limit=10
+Content-Type: application/json
+
+### Mostrar data filtrada por ingresos
+GET http://localhost:3333/data/filter/income?income=%3C%3D50k&page=1&limit=10
+Content-Type: application/json
+
+## <= → %3C%3D
+## >= → %3E%3D
+## < → %3C
+## > → %3E
+
+### Mostrar data ordenada ascendente
+GET http://localhost:3333/data/order/asc?order_by=age&page=300&limit=10
+Content-Type: application/json
+
+### Mostrar data ordenada descendente
+GET http://localhost:3333/data/order?order_by=occupation&order_direction=DESC&page=1&limit=10
+Content-Type: application/json
