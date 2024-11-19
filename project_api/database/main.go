@@ -35,9 +35,6 @@ func ConvertDataSet() {
 	// conectar con la base de datos
 	db := CreateDbConnection()
 
-	// Crear el tipo enum en PostgreSQL
-	db.Exec("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status_enum') THEN CREATE TYPE status_enum AS ENUM ('active', 'inactive', 'pending'); END IF; END $$;")
-
 	// Migrar el esquema para crear la tabla
 	if err := db.AutoMigrate(&models.DataRecord{}); err != nil {
 		log.Fatalf("Error en la migración de la base de datos: " + err.Error())
@@ -59,7 +56,7 @@ func ConvertDataSet() {
 	}
 
 	// limpiar los espacios en blanco de los datos
-	for i := range dataRecords{
+	for i := range dataRecords {
 		dataRecords[i].Education = strings.TrimSpace(dataRecords[i].Education)
 		dataRecords[i].Marital_Status = strings.TrimSpace(dataRecords[i].Marital_Status)
 		dataRecords[i].Occupation = strings.TrimSpace(dataRecords[i].Occupation)
