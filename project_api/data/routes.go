@@ -10,8 +10,8 @@ func AddRoutes(router *gin.Engine) {
 	group.GET("/all", ShowAllData)
 	group.GET("/filter/education", FilterDataByEducation)
 	group.GET("/filter/marital_status", FilterDataByMaritalStatus)
-	group.GET("/filter/occupation", FilterDataByOcupation)
-	group.GET("/filter/age", FilterDataByAge)
+	group.GET("/filter/occupation", FilterDataByOccupation)
+	group.GET("/filter/age", FilterDataByAgeRange)
 	group.GET("/filter/income", FilterDataByIncome)
 	group.GET("/order", OrderData)
 
