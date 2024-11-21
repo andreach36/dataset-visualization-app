@@ -5,6 +5,7 @@ import (
 	"trucode3-challenge-final/project_api/data"
 	"trucode3-challenge-final/project_api/database"
 	"trucode3-challenge-final/project_api/models"
+	"trucode3-challenge-final/project_api/shared"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -12,6 +13,7 @@ import (
 
 func setupRouter() *gin.Engine {
 	router := gin.Default()
+	router.Use(shared.Cors())
 	data.AddRoutes(router)
 
 	return router

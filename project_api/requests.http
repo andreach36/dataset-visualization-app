@@ -1,5 +1,5 @@
 ### Mostrar la data
-GET http://localhost:3333/data/all
+GET http://localhost:3333/data
 Content-Type: application/json
 
 ### Mostrar data filtrada por educacion

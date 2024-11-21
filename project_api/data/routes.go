@@ -7,7 +7,7 @@ import (
 func AddRoutes(router *gin.Engine) {
 	group := router.Group("/data")
 
-	group.GET("/all", ShowAllData)
+	group.GET("", ShowAllData)
 	group.GET("/filter/education", FilterDataByEducation)
 	group.GET("/filter/marital_status", FilterDataByMaritalStatus)
 	group.GET("/filter/occupation", FilterDataByOccupation)
