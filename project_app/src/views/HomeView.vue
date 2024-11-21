@@ -1,49 +1,99 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { type DataPagination, type DataRecord } from '@/types';
+import { onMounted, ref } from 'vue';
 
-// Define los encabezados a partir de la interfaz UserRecordTable
-const headers = ref([
+
+
+// los headers de la tabla
+const HeadersTable = [
   "Age",
-  "Workclass",
-  "FinalWeight",
   "Education",
-  "Education_Num",
-  "Marital_Status",
+  "Marital Status",
   "Occupation",
-  "Relationship",
-  "Race",
-  "Sex",
-  "Capital_Gain",
-  "Capital_Loss",
-  "Hours_Per_Week",
-  "Native_Country",
-  "Income_Range",
-]);
+  "Income",
+]
+
+
+// se crea lista de datos de la tabla
+const dataRecords = ref<DataRecord[]>([])
+
+const dataPagination = ref<DataPagination>({
+  page: 1,
+  page_size: 10,
+  total_pages: 0,
+  total_records: 0,
+})
+
+// función para cargar datos de la tabla
+async function loadData (page: number) {
+  try {
+    const response = await fetch(`http://localhost:3333/data?page=${page}&limit=${dataPagination.value.page_size}`)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+    const result = await response.json()
+    dataRecords.value = (result.data as DataRecord[])
+    dataPagination.value = (result.meta as DataPagination)
+  } catch (error) {
+    console.error('Failed to load data:', error)
+    dataRecords.value = []
+  }
+}
+
+// Cambiar página
+function changePage(newPage: number) {
+  if (newPage >= 1 && newPage <= dataPagination.value.total_pages) {
+    loadData(newPage)
+  }
+}
+
+// Montar el componente y cargar la primera página
+onMounted(() => {
+  loadData(dataPagination.value.page);
+});
 
 </script>
 
 <template>
-  <main class="bg-gray-100 flex justify-center min-h-screen py-16">
-    <div class="overflow-x-auto w-[90%] max-w-4xl border border-gray-300 rounded-md shadow-md bg-white mt-16">
+  <main class="bg-gray-100 flex justify-center items-center py-16 min-h-screen">
+    <div class="w-[90%] max-w-5xl border rounded-lg shadow-lg mt-16">
       <table class="table-auto w-full border-collapse">
       <thead>
         <tr class="bg-gray-200">
           <!-- Generar los encabezados dinámicamente -->
-          <th v-for="header in headers" :key="header" class="border border-gray-300 px-4 py-2 text-xs font-medium text-gray-700">
+          <th v-for="header in HeadersTable" :key="header" class="border border-gray-300 px-4 py-2 text-xs font-medium text-gray-700">
             {{ (header) }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <!-- Aquí puedes agregar dinámicamente las filas si tienes datos -->
-        <tr>
-          <td v-for="header in headers" :key="header" class="border border-gray-300 px-4 py-2">
-            <!-- Ejemplo de valores predeterminados -->
-            -
+        <!-- Generar filas dinámicamente -->
+        <tr v-for="datarow in dataRecords" :key="datarow.id">
+          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+            {{ (datarow.Age) }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+            {{ (datarow.Education) }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+            {{ (datarow.Marital_Status) }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+            {{ (datarow.Occupation) }}
+          </td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+            {{ (datarow.Income) }}
           </td>
         </tr>
       </tbody>
      </table>
+     <!-- Mostrar la paginación -->
+      <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t">
+        <button class="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page - 1)">Anterior</button>
+        <span class="text-sm text-gray-700">Página actual {{dataPagination.page}} de {{ dataPagination.total_pages }}</span>
+        <button class="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page + 1)">Siguiente</button>
+        <span  class="text-sm text-gray-700">Total Datos: {{ dataPagination.total_records }}</span>
+      </div>
     </div>
   </main>
 </template>
