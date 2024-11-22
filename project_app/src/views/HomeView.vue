@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import { type DataPagination, type DataRecord } from '@/types';
+import { HeadersTable, filterOptionsEducation, filterOptionsOccupation, filterOptionsMaritalStatus, filterOptionsIncome, orderOptions } from '@/data_table/labels';
 import { onMounted, ref, watch } from 'vue';
-
-// los headers de la tabla
-const HeadersTable = [
-  "Age",
-  "Education",
-  "Marital Status",
-  "Occupation",
-  "Income",
-]
-
 
 // se crea lista de datos de la tabla
 const dataRecords = ref<DataRecord[]>([])
@@ -22,68 +13,6 @@ const dataPagination = ref<DataPagination>({
   total_records: 0,
 })
 
-// opciones de filtros
-const filterOptionsEducation = [
-    "All",
-    "Bachelors", 
-    "Some-college", 
-    "11th", 
-    "HS-grad", 
-    "Prof-school", 
-    "Assoc-acdm", 
-    "Assoc-voc", 
-    "9th", 
-    "7th-8th", 
-    "12th", 
-    "Masters", 
-    "1st-4th", 
-    "10th", 
-    "Doctorate", 
-    "5th-6th", 
-    "Preschool"
-]
-
-const filterOptionsMaritalStatus = [
-  "All",
-  "Married-civ-spouse",
-  "Divorced", 
-  "Never-married", 
-  "Separated", 
-  "Widowed", 
-  "Married-spouse-absent", 
-  "Married-AF-spouse"
-]
-
-const filterOptionsOccupation = [
-  "All",
-  "Tech-support", 
-  "Craft-repair", 
-  "Other-service", 
-  "Sales", 
-  "Exec-managerial", 
-  "Prof-specialty", 
-  "Handlers-cleaners", 
-  "Machine-op-inspct", 
-  "Adm-clerical", 
-  "Farming-fishing", 
-  "Transport-moving", 
-  "Priv-house-serv", 
-  "Protective-serv", 
-  "Armed-Forces"
-]
-
-const filterOptionsIncome = [
-  "All",
-  "<=50K",
-  ">50K",
-]
-
-const orderOptions = [
-  "All",
-  "Asc",
-  "Desc"
-]
-
 // rango de edad y valores seleccionados
 const filters = ref({
   education : '',
@@ -94,6 +23,7 @@ const filters = ref({
   order_direction: '',
   min_age: 0,
   max_age: 100,
+  export: false,
 
 })
 
@@ -145,6 +75,10 @@ async function loadData (page: number) {
     }
     if (filters.value.order_direction && filters.value.order_direction !== "All") {
       params.append('order_direction', filters.value.order_direction.toUpperCase());
+    }
+
+    if (filters.value.export == true) {
+      params.append('export', filters.value.export.toString())
     }
 
     // Concatenar los parámetros adicionales a la URL
@@ -237,6 +171,9 @@ onMounted(() => {
             <input type="number" v-model="filters.max_age" class="border rounded px-2 py-1 w-20" placeholder="Max" />
           </div>
         </div>
+        <div class="py-2 px-2">
+          <button class="bg-green-600 px-2 py-2 border-t rounded text-sm text-white" @click="filters.export=true">Export Data</button>
+        </div>
       </div>
       
       <table class="table-auto w-full border-collapse">
@@ -254,16 +191,40 @@ onMounted(() => {
           <td class="border border-gray-300 px-4 py-2 text-center text-xs">
             {{ (datarow.Age) }}
           </td>
-          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Work_Class) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
             {{ (datarow.Education) }}
           </td>
-          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
             {{ (datarow.Marital_Status) }}
           </td>
-          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
             {{ (datarow.Occupation) }}
           </td>
-          <td class="border border-gray-300 px-4 py-2 text-center text-xs">
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Relationship) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Race) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Sex) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Capital_Gain) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Capital_Loss) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Hours_Per_Week) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
+            {{ (datarow.Native_Country) }}
+          </td>
+          <td class="border border-gray-300 px-2 py-2 text-center text-xs">
             {{ (datarow.Income) }}
           </td>
         </tr>
@@ -271,9 +232,9 @@ onMounted(() => {
      </table>
      <!-- Mostrar la paginación -->
       <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t">
-        <button class="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page - 1)">Before</button>
+        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page - 1)">Before</button>
         <span class="text-sm text-gray-700">Page {{dataPagination.page}} from {{ dataPagination.total_pages }}</span>
-        <button class="px-4 py-2 bg-gray-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page + 1)">Next</button>
+        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page + 1)">Next</button>
         <span  class="text-sm text-gray-700">Total Data: {{ dataPagination.total_records }}</span>
       </div>
     </div>
