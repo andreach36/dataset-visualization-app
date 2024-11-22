@@ -121,25 +121,46 @@ func FilterAndOrderData(c *gin.Context) {
 	var totalRecords int64
 	query.Model(&models.DataRecord{}).Count(&totalRecords)
 
-	// aplicar paginacion
-	query, page, pageSize := ApplyPagination(c, query)
-
-	// ejecutar la consulta final
-
-	tx := query.Find(&filteredRecords)
-	if tx.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to filter data"})
+	// verificar si se solicita exportar los datos
+	export := c.DefaultQuery("export", "false")
+	if export == "true" {
+		// ejecutar la consulta final
+		tx := query.Find(&filteredRecords)
+		if tx.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to filter data"})
+			return
+		}
+		// exportar la data
+		err := ExportData(filteredRecords)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to export data"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Data exported successfully"})
 		return
+	} else {
+
+		// aplicar paginacion
+		query, page, pageSize := ApplyPagination(c, query)
+
+		// ejecutar la consulta final
+		tx := query.Find(&filteredRecords)
+		if tx.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to filter data"})
+			return
+		}
+
+		// responder con datos y metadatos de paginación
+		c.JSON(http.StatusOK, gin.H{
+			"data": filteredRecords,
+			"meta": gin.H{
+				"total_records": totalRecords,
+				"page":          page,
+				"page_size":     pageSize,
+				"total_pages":   (totalRecords + int64(pageSize) - 1) / int64(pageSize),
+			},
+		})
+
 	}
 
-	// responder con datos y metadatos de paginación
-	c.JSON(http.StatusOK, gin.H{
-		"data": filteredRecords,
-		"meta": gin.H{
-			"total_records": totalRecords,
-			"page":          page,
-			"page_size":     pageSize,
-			"total_pages":   (totalRecords + int64(pageSize) - 1) / int64(pageSize),
-		},
-	})
 }

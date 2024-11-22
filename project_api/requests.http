@@ -3,7 +3,7 @@ GET http://localhost:3333/data
 Content-Type: application/json
 
 ### Filtrar Data por varios campos
-GET http://localhost:3333/data/filter?min_age=30&max_age=50&education=Bachelors&occupation=Sales&income=%3E50K&order_by=age&order_direction=ASC&page=1&page_size=10
+GET http://localhost:3333/data/filter?min_age=30&max_age=50&education=Bachelors&occupation=Sales&income=%3E50K&order_by=age&order_direction=ASC&page=1&page_size=10&export=true
 Content-Type: application/json
 
 ### Filtrar Data por varios campos
