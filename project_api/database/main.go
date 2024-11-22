@@ -57,9 +57,14 @@ func ConvertDataSet() {
 
 	// limpiar los espacios en blanco de los datos
 	for i := range dataRecords {
+		dataRecords[i].Work_Class = strings.TrimSpace(dataRecords[i].Work_Class)
 		dataRecords[i].Education = strings.TrimSpace(dataRecords[i].Education)
 		dataRecords[i].Marital_Status = strings.TrimSpace(dataRecords[i].Marital_Status)
 		dataRecords[i].Occupation = strings.TrimSpace(dataRecords[i].Occupation)
+		dataRecords[i].Relationship = strings.TrimSpace(dataRecords[i].Relationship)
+		dataRecords[i].Race = strings.TrimSpace(dataRecords[i].Race)
+		dataRecords[i].Sex = strings.TrimSpace(dataRecords[i].Sex)
+		dataRecords[i].Native_Country = strings.TrimSpace(dataRecords[i].Native_Country)
 		dataRecords[i].Income = strings.TrimSpace(dataRecords[i].Income)
 	}
 
