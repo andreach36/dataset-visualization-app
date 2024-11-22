@@ -2,6 +2,7 @@ package data
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 	"trucode3-challenge-final/project_api/database"
 	"trucode3-challenge-final/project_api/models"
@@ -105,9 +106,12 @@ func FilterDataByAgeRange(c *gin.Context) {
 // filtrar y ordenar según los ingresos
 func FilterDataByIncome(c *gin.Context) {
 	income := c.Query("income")
-	// Reemplazar caracteres Unicode escapados en income
-	income = strings.ReplaceAll(income, "\u003c", "<")
-	income = strings.ReplaceAll(income, "\u003e", ">")
+	income, err := url.QueryUnescape(income)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 	if income == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing 'income' query parameter"})
 		return
@@ -128,9 +132,9 @@ func FilterDataByIncome(c *gin.Context) {
 	// aplicar filtros según rango de ingresos
 	switch {
 	case strings.HasPrefix(income, "<"):
-		query = db.Where("income <= ?", strings.TrimPrefix(income, "<="))
+		query = db.Where("income = ?", income)
 	case strings.HasPrefix(income, ">"):
-		query = db.Where("income > ?", strings.TrimPrefix(income, ">"))
+		query = db.Where("income = ?", income)
 	}
 
 	// Agregar ordenamiento si se especifica

@@ -19,7 +19,7 @@ GET http://localhost:3333/data/filter/age?min_age=20&max_age=30&order_by=age&ord
 Content-Type: application/json
 
 ### Mostrar data filtrada por ingresos
-GET http://localhost:3333/data/filter/income?income=%3E=50K&page=1&limit=10
+GET http://localhost:3333/data/filter/income?income=%3C%3D50K&page=1&limit=10
 Content-Type: application/json
 
 ## <= → %3C%3D // <=50K

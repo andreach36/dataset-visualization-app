@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// func FilterAndOrderDataByColumns(c *gin.Context, vars ...string){
+	// FilterAndOrderDataByColumns(c, "education", "occupation")
+// 	for index, variable := range vars{
+// 		dentre de este for voy filtrando según los campos ingresados en vars
+// 	}
+// }
+
+
 func FilterAndOrderData(queryField string, c *gin.Context) {
 	fieldValue := c.Query(queryField)
 	if fieldValue == "" {
