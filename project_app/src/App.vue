@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+import { useAuthStore } from './stores/auth';
 import NavBar from './components/NavBar.vue';
-import HomeView from './views/HomeView.vue';
+
+const authStore = useAuthStore()
+
+onBeforeMount(authStore.init)
 
 </script>
 
 
 <template>
   <NavBar></NavBar>
-  <HomeView></HomeView>
+  <RouterView></RouterView>
 </template>

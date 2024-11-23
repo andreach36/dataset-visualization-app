@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="bg-gray-100 flex justify-center items-center py-16 min-h-screen">
+  <main class="bg-purple-100 flex justify-center items-center py-16 min-h-screen">
     <div class="w-[90%] max-w-5xl border rounded-lg shadow-lg mt-16">
       <!--Filtros-->
       <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t text-center text-xs">

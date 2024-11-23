@@ -23,3 +23,17 @@ export interface DataPagination {
     total_records: number
 }
 
+export interface User {
+    id: number
+    username: string
+    password: string
+}
+
+export interface JWTPayload {
+    MapClaims: {
+        eat: number
+        iat: number
+    }
+    Session: string
+}
+
