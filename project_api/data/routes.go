@@ -10,10 +10,9 @@ func AddRoutes(router *gin.Engine) {
 	group := router.Group("/data")
 	group.Use(shared.AuthenticateSession())
 
-	group.GET("/filters", InitializeUserFilters) // Inicializa al usuario con filtros predeterminados
-
 	group.GET("", ShowAllData)
 
-	group.PUT("/filters/:id", UpdateUserFilter) // Actualiza un filtro
-	group.GET("/filter", FilterAndOrderData)    // Filtra la data
+	group.PUT("/filters", UpdateUserFilter)  // Actualiza un filtro
+	group.GET("/filters", GetUserFilter)     // Obtener los filtros del usuario
+	group.GET("/filter", FilterAndOrderData) // Filtra la data
 }

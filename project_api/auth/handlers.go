@@ -40,6 +40,24 @@ func Register(c *gin.Context) {
 
 	}
 
+	// se inicializan los filtros predefinidos
+	defaultFilter := models.Filter{
+		UserID:         user.ID,
+		MinAge:         "0", // Valores predeterminados
+		MaxAge:         "100",
+		Education:      "",
+		MaritalStatus:  "",
+		Occupation:     "",
+		Income:         "",
+		OrderBy:        "",
+		OrderDirection: "",
+	}
+	// se crean los filtros predefinidos en la base de datos
+	if err := database.CreateDbConnection().Create(&defaultFilter).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create default filter"})
+		return
+	}
+
 	// generar token session
 	sessionToken := uuid.NewV5(uuid.UUID{}, "session").String()
 	session := shared.Session{
