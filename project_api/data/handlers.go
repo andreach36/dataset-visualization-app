@@ -12,6 +12,7 @@ import (
 
 // mostrar todos los datos
 func ShowAllData(c *gin.Context) {
+
 	var dataRecords []models.DataRecord
 	db := database.CreateDbConnection()
 

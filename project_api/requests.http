@@ -1,10 +1,58 @@
+### Registrar usuario
+POST http://localhost:3333/auth/register
+Content-Type: application/json
+
+{
+    "username": "Test1",
+    "password": "12345"
+}
+### Iniciar sesion
+POST http://localhost:3333/auth/login
+Content-Type: application/json
+
+{
+    "username": "Test1",
+    "password": "12345"
+}
+### Cerrar sesion
+DELETE http://localhost:3333/auth/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI4Mjk0LCJpYXQiOjE3MzIzMjQ2OTR9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.F69QDsOiMd6435dkUr18SFcjNBN31-HRR5vfzP6yfYY
+
 ### Mostrar la data
 GET http://localhost:3333/data
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI3OTI1LCJpYXQiOjE3MzIzMjQzMjV9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.fot5jj_saLkP50JJS9oJaDsbh24kQZNkCpU1ZsulR0U
 
 ### Filtrar Data por varios campos
-GET http://localhost:3333/data/filter?min_age=30&max_age=50&education=Bachelors&occupation=Sales&income=%3E50K&order_by=age&order_direction=ASC&page=1&page_size=10&export=true
+GET http://localhost:3333/data/filter?min_age=30&max_age=50&education=Bachelors&occupation=Sales&income=%3E50K&order_by=age&order_direction=ASC&page=1&page_size=10&export=false
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI1MTE5LCJpYXQiOjE3MzIzMjE1MTl9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.qoi0lZmWhV6ss3fOomIVo2IQWwb3BdYxEKIQP8_vR24
+
+### Obtener filtros del usuario
+GET http://localhost:3333/data/filters
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI1MTE5LCJpYXQiOjE3MzIzMjE1MTl9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.qoi0lZmWhV6ss3fOomIVo2IQWwb3BdYxEKIQP8_vR24
+
+
+### Actualizar filtros del usuario
+PUT http://localhost:3333/data/filters/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI1MTE5LCJpYXQiOjE3MzIzMjE1MTl9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.qoi0lZmWhV6ss3fOomIVo2IQWwb3BdYxEKIQP8_vR24
+
+{
+    "education": "Masters",
+    "marital_status": "Married",
+    "occupation": "Sales",
+    "income": ">50K"
+}
+
+
+
+
+
+
+
 
 ### Filtrar Data por varios campos
 GET http://localhost:3333/data/filter?min_age=0&max_age=100&income=%3E50K&page=1&page_size=10

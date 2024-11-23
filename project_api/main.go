@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"trucode3-challenge-final/project_api/auth"
 	"trucode3-challenge-final/project_api/data"
 	"trucode3-challenge-final/project_api/database"
 	"trucode3-challenge-final/project_api/models"
@@ -14,6 +15,7 @@ import (
 func setupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(shared.Cors())
+	auth.AddRoutes(router)
 	data.AddRoutes(router)
 
 	return router
@@ -40,6 +42,9 @@ func main() {
 	} else {
 		log.Println("Los datos ya se encuentran cargados en el database")
 	}
+
+	// inicializar la tabla de usuario y filtros de usuario
+	db.AutoMigrate(&models.User{}, &models.Filter{})
 
 	// congigurar y ejecutar servidor
 	router := setupRouter()
