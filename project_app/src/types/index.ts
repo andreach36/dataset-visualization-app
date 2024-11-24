@@ -1,4 +1,3 @@
-
 export interface DataRecord {
     id: number
     Age : number
@@ -35,5 +34,16 @@ export interface JWTPayload {
         iat: number
     }
     Session: string
+}
+
+export interface UserFilters{
+    education: string | undefined
+    marital_status: string | undefined
+    occupation: string | undefined
+    income: string | undefined
+    order_by: string | undefined
+    order_direction: string | undefined
+    min_age: string | undefined
+    max_age: string | undefined
 }
 

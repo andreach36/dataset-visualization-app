@@ -1,178 +1,66 @@
 <script setup lang="ts">
-import { type DataPagination, type DataRecord } from '@/types';
-import { HeadersTable, filterOptionsEducation, filterOptionsOccupation, filterOptionsMaritalStatus, filterOptionsIncome, orderOptions } from '@/data_table/labels';
-import { onMounted, ref, watch } from 'vue';
+import { HeadersTable } from '@/data_table/labels';
+import { onMounted} from 'vue';
+import { useDataStore } from '../stores/data';
+import { useFilterStore } from '../stores/filter';
+import { ref } from "vue";
+import ModalComponent from "../components/ModalComponent.vue";
 
-// se crea lista de datos de la tabla
-const dataRecords = ref<DataRecord[]>([])
+const dataStore = useDataStore()
+const filterStore = useFilterStore()
 
-const dataPagination = ref<DataPagination>({
-  page: 1,
-  page_size: 10,
-  total_pages: 0,
-  total_records: 0,
-})
+const isModalOpened = ref(false)
 
-// rango de edad y valores seleccionados
-const filters = ref({
-  education : '',
-  marital_status : '',
-  occupation : '',
-  income: '',
-  order_by: '',
-  order_direction: '',
-  min_age: 0,
-  max_age: 100,
-  export: false,
+const openModal = () => {
+  isModalOpened.value = true
+}
+const closeModal = () => {
+  isModalOpened.value = false
+}
 
-})
-
-
-// función para cargar datos de la tabla
-async function loadData (page: number) {
-  try {
-
-    let baseUrl = "http://localhost:3333/data";
-
-     // Verificar si hay filtros seleccionados
-     const hasFilters =
-      filters.value.min_age || filters.value.max_age || filters.value.education ||
-      filters.value.marital_status || filters.value.occupation || filters.value.income;
-
-    let url = baseUrl
-
-    if (hasFilters) {
-      url = "http://localhost:3333/data/filter"; // Cambiar la base de la URL si hay filtros
-    
-     // Agregar el segmento dinámico para la edad si está definido
-     if (filters.value.min_age || filters.value.max_age) {
-      url += `?min_age=${filters.value.min_age || 0}&max_age=${filters.value.max_age || 100}`;
-    }
-  }
-
-    // construir parámetros dinámicos
-    const params = new URLSearchParams({
-      page: String(page),
-      page_size: String(dataPagination.value.page_size),
-    })
-
-    // agregar filtros opcionales
-    if (filters.value.education && filters.value.education !== "All") {
-      params.append('education', filters.value.education)
-    }
-    if (filters.value.marital_status && filters.value.marital_status !== "All") {
-      params.append('marital_status', filters.value.marital_status)
-    }
-    if (filters.value.occupation && filters.value.occupation !== "All") {
-      params.append('occupation', filters.value.occupation)
-    }
-    if (filters.value.income && filters.value.income !== "All") {
-      params.append('income', filters.value.income)
-    }
-    // Solo agregar order_by y order_direction si tienen un valor seleccionado
-    if (filters.value.order_by && filters.value.order_by !== "All") {
-      params.append('order_by', filters.value.order_by.toLowerCase());
-    }
-    if (filters.value.order_direction && filters.value.order_direction !== "All") {
-      params.append('order_direction', filters.value.order_direction.toUpperCase());
-    }
-
-    if (filters.value.export == true) {
-      params.append('export', filters.value.export.toString())
-    }
-
-    // Concatenar los parámetros adicionales a la URL
-    if (hasFilters) {
-      url += `&${params.toString()}`;  // Concatenamos a la URL de los filtros
-    } else {
-      url += `?${params.toString()}`;  // En caso de no tener filtros, empezamos con '?'
-    }
-    console.log("Request URL:", url); // Verificar la URL construida
-
-    // realizar la solicitud
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
-    const result = await response.json()
-    dataRecords.value = (result.data as DataRecord[])
-    dataPagination.value = (result.meta as DataPagination)
-} catch (error) {
-    console.error('Failed to load data:', error)
-    dataRecords.value = []
-  }
+const submitHandler = async () => {
+  await filterStore.updateUserFilters()
+  dataStore.loadData(dataStore.dataPagination.page, filterStore.userFilters)
+  closeModal()
 }
 
 // Cambiar página
 function changePage(newPage: number) {
-  if (newPage >= 1 && newPage <= dataPagination.value.total_pages) {
-    loadData(newPage)
+  if (newPage >= 1 && newPage <= dataStore.dataPagination.total_pages) {
+    dataStore.loadData(newPage, filterStore.userFilters)
   }
 }
 
-
-// Observar cambios en filtros
-watch(filters, () => {
-  loadData(1); // Recargar la tabla cuando se cambia el filtro
-}, {deep: true});
-
 // Montar el componente y cargar la primera página
-onMounted(() => {
-  loadData(dataPagination.value.page);
+onMounted(async () => {
+  await filterStore.loadUserFilters(); // Espera a que los filtros se carguen
+  dataStore.loadData(dataStore.dataPagination.page, filterStore.userFilters); // Carga los datos usando los filtros actualizados
 });
+
+// Exportar Data
+function triggerExport() {
+    filterStore.exportData = true;
+
+    // Ejecutar lógica para exportar datos, por ejemplo:
+   
+    // Después de exportar, puedes resetearlo si es necesario:
+    filterStore.exportData = false;
+}
 
 </script>
 
 <template>
-  <main class="bg-purple-100 flex justify-center items-center py-16 min-h-screen">
+  <main class="bg-gray-100 flex justify-center items-center py-16 min-h-screen">
     <div class="w-[90%] max-w-5xl border rounded-lg shadow-lg mt-16">
-      <!--Filtros-->
-      <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t text-center text-xs">
-        <div>
-          <label>Filter Education</label>
-          <select v-model="filters.education" class="border rounded px-2 py-1">
-            <option v-for="option in filterOptionsEducation" :key="option" :value="option">{{ option }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Filter Marital Status</label>
-          <select v-model="filters.marital_status" class="border rounded px-2 py-1">
-            <option v-for="option in filterOptionsMaritalStatus" :key="option" :value="option">{{ option }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Filter Occupation</label>
-          <select v-model="filters.occupation" class="border rounded px-2 py-1">
-            <option v-for="option in filterOptionsOccupation" :key="option" :value="option">{{ option }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Filter Income</label>
-          <select v-model="filters.income" class="border rounded px-2 py-1">
-            <option v-for="option in filterOptionsIncome" :key="option" :value="option">{{ option }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Order By</label>
-          <select v-model="filters.order_by" class="border rounded px-2 py-1">
-            <option v-for="header in HeadersTable" :key="header" :value="header">{{ header }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Order Direction</label>
-          <select v-model="filters.order_direction" class="border rounded px-2 py-1">
-            <option v-for="option in orderOptions" :key="option" :value="option">{{ option }}</option>
-          </select>
-      </div>
-      <div>
-          <label>Age Range</label>
-          <div class="flex gap-2">
-            <input type="number" v-model="filters.min_age" class="border rounded px-2 py-1 w-20" placeholder="Min" />
-            <input type="number" v-model="filters.max_age" class="border rounded px-2 py-1 w-20" placeholder="Max" />
-          </div>
-        </div>
+      <!--Opciones Tabla-->
+      <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t text-center">
         <div class="py-2 px-2">
-          <button class="bg-green-600 px-2 py-2 border-t rounded text-sm text-white" @click="filters.export=true">Export Data</button>
+          <button class="bg-blue-800 px-2 py-2 border-t rounded text-sm text-white"  @click="openModal">Filter Options</button>
+        </div>
+        <ModalComponent :isOpen="isModalOpened" @modal-close="closeModal" @submit="submitHandler" name="first-modal">
+        </ModalComponent>
+        <div class="py-2 px-2">
+          <button class="bg-green-600 px-2 py-2 border-t rounded text-sm text-white" @click="triggerExport">Export Data</button>
         </div>
       </div>
       
@@ -187,7 +75,7 @@ onMounted(() => {
       </thead>
       <tbody>
         <!-- Generar filas dinámicamente -->
-        <tr v-for="datarow in dataRecords" :key="datarow.id">
+        <tr v-for="datarow in dataStore.dataRecords" :key="datarow.id">
           <td class="border border-gray-300 px-4 py-2 text-center text-xs">
             {{ (datarow.Age) }}
           </td>
@@ -232,10 +120,10 @@ onMounted(() => {
      </table>
      <!-- Mostrar la paginación -->
       <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-t">
-        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page - 1)">Before</button>
-        <span class="text-sm text-gray-700">Page {{dataPagination.page}} from {{ dataPagination.total_pages }}</span>
-        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataPagination.page + 1)">Next</button>
-        <span  class="text-sm text-gray-700">Total Data: {{ dataPagination.total_records }}</span>
+        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataStore.dataPagination.page - 1)">Before</button>
+        <span class="text-sm text-gray-700">Page {{dataStore.dataPagination.page}} from {{ dataStore.dataPagination.total_pages }}</span>
+        <button class="px-4 py-2 bg-sky-800 text-white rounded disabled:opacity-50" @click="changePage(dataStore.dataPagination.page + 1)">Next</button>
+        <span  class="text-sm text-gray-700">Total Data: {{ dataStore.dataPagination.total_records }}</span>
       </div>
     </div>
   </main>
