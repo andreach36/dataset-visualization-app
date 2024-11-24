@@ -38,11 +38,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZ
 ### Actualizar filtros del usuario
 PUT http://localhost:3333/data/filters
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzg2NjM3LCJpYXQiOjE3MzIzODMwMzd9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.hDTkoE4uIUEP0C90FNWTKjRK9VPQhmeNfU25e9L-css
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyNDIwOTY0LCJpYXQiOjE3MzI0MTczNjR9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0._ovwqy7uuQSh9O4gzC6e7dHvBiTaxSRzaYEpm7q3vYI
 
 {
     "education": "Bachelors",
-    "marital_status": "Married",
+    "marital_status": "Married-civ-spouse",
     "occupation": "Sales",
     "income": ">50K"
 }

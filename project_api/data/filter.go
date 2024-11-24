@@ -30,10 +30,11 @@ func UpdateUserFilter(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Filter not found or not owned by user"})
 		return
 	}
-
+	fmt.Printf("Request Body: %+v\n", filter)
 	// Actualizar los campos del filtro con los nuevos valores
 	if err := c.ShouldBindJSON(&filter); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		fmt.Println("Bind Error:", err.Error())
 		return
 	}
 
@@ -43,7 +44,7 @@ func UpdateUserFilter(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Filter updated successfully", "filter": filter})
+	c.JSON(http.StatusOK, gin.H{"message": "Filter updated successfully", "filters": filter})
 }
 
 func GetUserFilter(c *gin.Context) {
