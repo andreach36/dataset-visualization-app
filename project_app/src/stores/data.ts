@@ -14,8 +14,6 @@ export const useDataStore = defineStore('data', () => {
         total_pages: 0,
         total_records: 0,
       })
-
-    const exportData = useFilterStore().exportData
     
     // función para cargar datos de la tabla
     // se recibe la página y los filtros del usuario
@@ -66,10 +64,6 @@ export const useDataStore = defineStore('data', () => {
         }
         if (filters.order_direction && filters.order_direction !== "All") {
             params.append('order_direction', filters.order_direction.toUpperCase());
-        }
-    
-        if ( exportData == true) {
-            params.append('export', exportData.toString())
         }
     
         // Concatenar los parámetros adicionales a la URL

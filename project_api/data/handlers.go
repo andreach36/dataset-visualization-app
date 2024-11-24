@@ -132,15 +132,9 @@ func FilterAndOrderData(c *gin.Context) {
 			return
 		}
 		// exportar la data
-		err := ExportData(filteredRecords)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to export data"})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"message": "Data exported successfully"})
+		ExportData(c, filteredRecords)
 		return
 	} else {
-
 		// aplicar paginacion
 		query, page, pageSize := ApplyPagination(c, query)
 
@@ -163,5 +157,4 @@ func FilterAndOrderData(c *gin.Context) {
 		})
 
 	}
-
 }

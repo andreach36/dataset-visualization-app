@@ -34,6 +34,9 @@ require (
 require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1 // indirect
+	github.com/gofrs/uuid v4.4.0+incompatible
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
