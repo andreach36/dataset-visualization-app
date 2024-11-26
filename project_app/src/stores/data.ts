@@ -72,8 +72,7 @@ export const useDataStore = defineStore('data', () => {
         } else {
             url += `?${params.toString()}`;  // En caso de no tener filtros, empezamos con '?'
         }
-        console.log("Request URL:", url); // Verificar la URL construida
-    
+       
         // realizar la solicitud
         const response = await fetch(url,{
             method: 'GET',

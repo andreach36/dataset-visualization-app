@@ -15,9 +15,6 @@ export const useFilterStore = defineStore('filters', () => {
         max_age: '',
     })
 
-     // Campo local del frontend
-     const exportData = ref(false);
-
     // funcion para recibir los filtros del usuario del backend
     async function loadUserFilters(){
         try {
@@ -51,10 +48,8 @@ export const useFilterStore = defineStore('filters', () => {
         try{
             // obtener el token de la session
             const sessionToken = sessionStorage.getItem('token')
-            console.log("Token:", sessionToken);
             const url = "http://localhost:3333/data/filters";
             const filtersToSend = userFilters.value; 
-            console.log("Filters being sent:", filtersToSend);
 
             const response = await fetch(url, {
                 method: 'PUT',
@@ -76,5 +71,5 @@ export const useFilterStore = defineStore('filters', () => {
 
    
 
-    return { userFilters, exportData, loadUserFilters, updateUserFilters};
+    return { userFilters, loadUserFilters, updateUserFilters};
 })
