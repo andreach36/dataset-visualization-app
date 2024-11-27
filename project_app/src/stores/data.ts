@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { type DataPagination, type DataRecord, type UserFilters } from '@/types';
 import { ref } from "vue";
-import { useFilterStore } from '@/stores/filter';
 
 export const useDataStore = defineStore('data', () => {
     
