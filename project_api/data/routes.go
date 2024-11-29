@@ -1,7 +1,7 @@
 package data
 
 import (
-	"trucode3-challenge-final/project_api/shared"
+	"project_api/shared"
 
 	"github.com/gin-gonic/gin"
 )

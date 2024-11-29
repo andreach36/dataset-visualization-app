@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"trucode3-challenge-final/project_api/database"
-	"trucode3-challenge-final/project_api/models"
-	"trucode3-challenge-final/project_api/shared"
+	"project_api/database"
+	"project_api/models"
+	"project_api/shared"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"

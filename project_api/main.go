@@ -2,11 +2,12 @@ package main
 
 import (
 	"log"
-	"trucode3-challenge-final/project_api/auth"
-	"trucode3-challenge-final/project_api/data"
-	"trucode3-challenge-final/project_api/database"
-	"trucode3-challenge-final/project_api/models"
-	"trucode3-challenge-final/project_api/shared"
+	"os"
+	"project_api/auth"
+	"project_api/data"
+	"project_api/database"
+	"project_api/models"
+	"project_api/shared"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -29,8 +30,10 @@ func loadEnvVars() {
 }
 
 func main() {
-	// cargar las variables de entorno
-	loadEnvVars()
+	if os.Getenv("GIN_MODE") != "release" {
+		// cargar las variables de entorno
+		loadEnvVars()
+	}
 	// conectar a la base de datos
 	db := database.CreateDbConnection()
 	// se verifica si hay registros en el database
@@ -48,6 +51,6 @@ func main() {
 
 	// congigurar y ejecutar servidor
 	router := setupRouter()
-	router.Run("0.0.0.0:3333")
+	router.Run(os.Getenv("PORT"))
 
 }

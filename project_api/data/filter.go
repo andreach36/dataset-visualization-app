@@ -3,8 +3,8 @@ package data
 import (
 	"fmt"
 	"net/http"
-	"trucode3-challenge-final/project_api/database"
-	"trucode3-challenge-final/project_api/models"
+	"project_api/database"
+	"project_api/models"
 
 	"github.com/gin-gonic/gin"
 )

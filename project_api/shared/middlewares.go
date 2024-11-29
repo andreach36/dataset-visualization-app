@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"trucode3-challenge-final/project_api/database"
-	"trucode3-challenge-final/project_api/models"
+	"project_api/database"
+	"project_api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

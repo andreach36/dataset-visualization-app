@@ -5,7 +5,7 @@ import (
 	"encoding/csv"
 	"net/http"
 	"strconv"
-	"trucode3-challenge-final/project_api/models"
+	"project_api/models"
 
 	"github.com/gin-gonic/gin"
 )

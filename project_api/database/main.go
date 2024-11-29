@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"project_api/models"
 	"strings"
-	"trucode3-challenge-final/project_api/models"
 
 	"github.com/gocarina/gocsv"
 	"gorm.io/driver/postgres"
@@ -41,7 +41,7 @@ func ConvertDataSet() {
 	}
 
 	// open the csv file
-	file, err := os.Open("../data/source.data")
+	file, err := os.Open("./data/source.data")
 
 	if err != nil {
 		log.Fatalf("Error al abrir el archivo csv" + err.Error())
