@@ -17,29 +17,28 @@ Content-Type: application/json
 ### Cerrar sesion
 DELETE http://localhost:3333/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI4Mjk0LCJpYXQiOjE3MzIzMjQ2OTR9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.F69QDsOiMd6435dkUr18SFcjNBN31-HRR5vfzP6yfYY
+Authorization: token
 
 ### Mostrar la data
 GET http://localhost:3333/data
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzg2NjM3LCJpYXQiOjE3MzIzODMwMzd9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.hDTkoE4uIUEP0C90FNWTKjRK9VPQhmeNfU25e9L-css
+Authorization: token
 
 ### Filtrar Data por varios campos
 GET http://localhost:3333/data/filter?min_age=30&max_age=50&education=Bachelors&occupation=Sales&income=%3E50K&order_by=age&order_direction=ASC&page=1&page_size=10&export=false
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzI1MTE5LCJpYXQiOjE3MzIzMjE1MTl9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.qoi0lZmWhV6ss3fOomIVo2IQWwb3BdYxEKIQP8_vR24
+Authorization: token
 
 ### Obtener filtros del usuario
 GET http://localhost:3333/data/filters
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyMzg2NjM3LCJpYXQiOjE3MzIzODMwMzd9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0.hDTkoE4uIUEP0C90FNWTKjRK9VPQhmeNfU25e9L-css
+Authorization: token
 
 
 ### Actualizar filtros del usuario
 PUT http://localhost:3333/data/filters
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZWF0IjoxNzMyNDIwOTY0LCJpYXQiOjE3MzI0MTczNjR9LCJTZXNzaW9uIjoiOThjODFiNTctNDEwMy01Y2RjLWE4NWEtYmI0YTU2YzBjZmNkIn0._ovwqy7uuQSh9O4gzC6e7dHvBiTaxSRzaYEpm7q3vYI
-
+Authorization: token
 {
     "education": "Bachelors",
     "marital_status": "Married-civ-spouse",
