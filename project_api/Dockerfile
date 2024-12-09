@@ -1,37 +1,21 @@
-# Etapa de construcción
-FROM golang:1.21-alpine AS builder
+FROM golang:1.21-alpine
+
+RUN mkdir app
 
 WORKDIR /app
 
-# Copiar go.mod y go.sum
-COPY ./go.mod ./go.sum ./
+COPY go.mod go.sum ./
 
-# Descargar dependencias
 RUN go mod download
 
-# Copiar el código fuente
+ARG PORT=:8080 \
+    GIN_MODE=release
+
+ENV PORT=${PORT} \
+    GIN_MODE=${GIN_MODE}
+
 COPY . .
 
-# Compilar la aplicación
 RUN go build -o main .
 
-# Etapa de ejecución
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-# Crear el directorio de trabajo
-WORKDIR /app
-
-# Copiar el binario desde la etapa de construcción
-COPY --from=builder /app/main .
-
-# Exponer el puerto
-EXPOSE 8080
-
-# Establecer las variables de entorno
-ENV PORT=${PORT}
-ENV GIN_MODE=${GIN_MODE}
-
-# Ejecutar el binario
 CMD ["./main"]
