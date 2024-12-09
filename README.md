@@ -46,3 +46,7 @@ El dataset utilizado fue creado por **Barry Becker** y está basado en un censo 
    - Los usuarios pueden exportar los datos filtrados y ordenados en formato **CSV** para su análisis externo.  
 
 ## **Capturas de pantalla**
+![Login_page](https://github.com/user-attachments/assets/1f1850fc-8a0e-4a9d-b70c-d2e4f03619c5)
+
+![Table_page](https://github.com/user-attachments/assets/bf41dd5e-5571-482f-90ec-17dd58e0757c)
+
